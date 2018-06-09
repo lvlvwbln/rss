@@ -1,32 +1,3 @@
-#import requests
-#from bs4 import BeautifulSoup
-
-# ul.list-medium-content
-
-#url = "http://www.flograppling.com"
-#result = requests.get(url)
-#c = result.content
-#soup = BeautifulSoup(c, "lxml")
-#ulist = soup.find('ul', {"class": "list-medium-content"})
-##print(ulist.prettify())
-## link is on an ANCHOR href attribute inside LI
-## a.href
-## title: div.title span
-## date : div.flo-footnote span
-#print(ulist.li.a['href'])
-#title = ulist.li.a.div.find('div', {"class": "title"})
-#print(title.span.string)
-#date = ulist.li.a.div.find('div', {"class": "flo-footnote"})
-#print(date.span.string)
-##print(len(ulist.li))
-#testedois = ulist.find_all('li')
-#for item in testedois:
-#   # print(item.a['href'])
-#    divs = item.a.find_all('div', {"class": "title"})
-#    #print(title.prettify())
-#    for div in divs:
-#        print(div.span.string)
-
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
@@ -72,14 +43,30 @@ else:
         if articles == None:
             print('no articles')
         else:
-            #print(articles)
+            #print(len(articles))
             #print(articles[0].prettify())
-            anchor = articles[0].a
-            title = anchor.find('div', {'class': 'title'})
-            title = title.get_text()
-            print(title)
-            date = anchor.find('div', {'class': 'flo-footnote'})
-            date = date.get_text()
-            print(date)
+#            anchor = articles[0].a
+#            title = anchor.find('div', {'class': 'title'})
+#            title = title.get_text()
+#            print(title)
+#            date = anchor.find('div', {'class': 'flo-footnote'})
+#            date = date.get_text()
+#            print(date)
+
+            for article in articles:
+                anchor = article.a
+                title = anchor.find('div', {'class': 'title'})
+                if title == None:
+                    content_feed = anchor.find('div', {'class': 'content-feed'})
+                    headings = content_feed.find_all('h4')
+                    title = headings[0].get_text().strip()
+                else:
+                    title = title.get_text().strip()
+                print(title)
+                #title = title.get_text()
+                #print(title)
+                #date = anchor.find('div', {'class': 'flo-footnote'})
+                #date = date.get_text()
+                #print(date)
     except AttributeError as e:
         print(e)
