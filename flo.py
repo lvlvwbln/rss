@@ -43,16 +43,6 @@ else:
         if articles == None:
             print('no articles')
         else:
-            #print(len(articles))
-            #print(articles[0].prettify())
-#            anchor = articles[0].a
-#            title = anchor.find('div', {'class': 'title'})
-#            title = title.get_text()
-#            print(title)
-#            date = anchor.find('div', {'class': 'flo-footnote'})
-#            date = date.get_text()
-#            print(date)
-
             for article in articles:
                 anchor = article.a
                 title = anchor.find('div', {'class': 'title'})
@@ -63,10 +53,14 @@ else:
                 else:
                     title = title.get_text().strip()
                 print(title)
-                #title = title.get_text()
-                #print(title)
-                #date = anchor.find('div', {'class': 'flo-footnote'})
-                #date = date.get_text()
-                #print(date)
+
+                date = anchor.find('div', {'class': 'flo-footnote'})
+                date = date.get_text()
+                print(date)
+
+                link = anchor['href']
+                print(link)
+                full_link = url + link
+                print(full_link)
     except AttributeError as e:
         print(e)
