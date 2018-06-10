@@ -41,6 +41,23 @@ def getLink(anchor):
     fullLink = url + anchor['href']
     return fullLink
 
+def parseContent(html):
+    bs = BeautifulSoup(html.read(), 'html.parser')
+    contentList = bs.find('ul', {"class": "list-medium-content"})
+    articles = getArticles(contentList)
+    if articles != None:
+        for article in articles:
+            anchor = getAnchor(article)
+            if anchor != None:
+                title = getTitle(anchor)
+                print(title)
+
+                date = getDate(anchor)
+                print(date)
+
+                link = getLink(anchor)
+                print(link)
+
 try:
     html = urlopen(url)
 except HTTPError as e:
@@ -49,22 +66,6 @@ except URLError as e:
     print('Server not found')
 else:
     try:
-        bs = BeautifulSoup(html.read(), 'html.parser')
-        unList = bs.find('ul', {"class": "list-medium-content"})
-        articles = getArticles(unList)
-        if articles == None:
-            print('no articles')
-        else:
-            for article in articles:
-                anchor = getAnchor(article)
-                if anchor != None:
-                    title = getTitle(anchor)
-                    print(title)
-
-                    date = getDate(anchor)
-                    print(date)
-
-                    link = getLink(anchor)
-                    print(link)
+        parseContent(html)
     except AttributeError as e:
         print(e)
