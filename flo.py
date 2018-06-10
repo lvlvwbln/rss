@@ -29,6 +29,13 @@ def getArticles(unList):
         return None
     return None
 
+def getAnchor(article):
+    try:
+        anchor = article.a
+        return anchor
+    except AttributeError as e:
+        return None
+
 try:
     html = urlopen(url)
 except HTTPError as e:
@@ -44,23 +51,25 @@ else:
             print('no articles')
         else:
             for article in articles:
-                anchor = article.a
-                title = anchor.find('div', {'class': 'title'})
-                if title == None:
-                    content_feed = anchor.find('div', {'class': 'content-feed'})
-                    headings = content_feed.find_all('h4')
-                    title = headings[0].get_text().strip()
-                else:
-                    title = title.get_text().strip()
-                print(title)
+                #anchor = article.a
+                anchor = getAnchor(article)
+                if anchor != None:
+                    title = anchor.find('div', {'class': 'title'})
+                    if title == None:
+                        content_feed = anchor.find('div', {'class': 'content-feed'})
+                        headings = content_feed.find_all('h4')
+                        title = headings[0].get_text().strip()
+                    else:
+                        title = title.get_text().strip()
+                    print(title)
 
-                date = anchor.find('div', {'class': 'flo-footnote'})
-                date = date.get_text()
-                print(date)
+                    date = anchor.find('div', {'class': 'flo-footnote'})
+                    date = date.get_text()
+                    print(date)
 
-                link = anchor['href']
-                print(link)
-                full_link = url + link
-                print(full_link)
+                    link = anchor['href']
+                    #print(link)
+                    full_link = url + link
+                    print(full_link)
     except AttributeError as e:
         print(e)
