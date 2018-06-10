@@ -4,23 +4,6 @@ from bs4 import BeautifulSoup
 
 url = 'http://www.flograppling.com'
 
-def getTitle(unList):
-    try:
-        title = unList.li.a.div.find('div', {"class": "title"})
-        #return title
-        return title.get_text()
-    except AttributeError as e:
-        return None
-    return None
-
-def getDate(unList):
-    try:
-        date = unList.li.a.div.find('div', {"class": "flo-footnote"})
-        return date.get_text()
-    except AttributeError as e:
-        return None
-    return None
-
 def getArticles(unList):
     try:
         articles = unList.find_all('li')
@@ -35,6 +18,16 @@ def getAnchor(article):
         return anchor
     except AttributeError as e:
         return None
+
+def getTitle(anchor):
+    title = anchor.find('div', {'class': 'title'})
+    if title == None:
+        content_feed = anchor.find('div', {'class': 'content-feed'})
+        headings = content_feed.find_all('h4')
+        title = headings[0].get_text().strip()
+    else:
+        title = title.get_text().strip()
+    return title
 
 try:
     html = urlopen(url)
@@ -51,16 +44,9 @@ else:
             print('no articles')
         else:
             for article in articles:
-                #anchor = article.a
                 anchor = getAnchor(article)
                 if anchor != None:
-                    title = anchor.find('div', {'class': 'title'})
-                    if title == None:
-                        content_feed = anchor.find('div', {'class': 'content-feed'})
-                        headings = content_feed.find_all('h4')
-                        title = headings[0].get_text().strip()
-                    else:
-                        title = title.get_text().strip()
+                    title = getTitle(anchor)
                     print(title)
 
                     date = anchor.find('div', {'class': 'flo-footnote'})
@@ -68,7 +54,6 @@ else:
                     print(date)
 
                     link = anchor['href']
-                    #print(link)
                     full_link = url + link
                     print(full_link)
     except AttributeError as e:
