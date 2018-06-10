@@ -2,6 +2,8 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 
+from feedgen.feed import FeedGenerator
+
 url = 'http://www.flograppling.com'
 
 def getArticles(unList):
@@ -70,4 +72,14 @@ except URLError as e:
     print('Server not found')
 else:
     results = parseContent(html)
-    print(results)
+    fg = FeedGenerator()
+    fg.title('some testfeed')
+    fg.link(href='http://example.com', rel='alternate')
+    fg.description('foobar')
+    for result in results:
+        (title, date, link) = result
+        fe = fg.add_entry()
+        fe.title(title)
+        fe.link(href=link)
+    fg.rss_file('podcast.xml')
+    fg.rss_str(pretty=True)
