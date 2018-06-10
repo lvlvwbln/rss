@@ -37,6 +37,10 @@ def getDate(anchor):
     except AttributeError as e:
         return None
 
+def getLink(anchor):
+    fullLink = url + anchor['href']
+    return fullLink
+
 try:
     html = urlopen(url)
 except HTTPError as e:
@@ -60,8 +64,7 @@ else:
                     date = getDate(anchor)
                     print(date)
 
-                    link = anchor['href']
-                    full_link = url + link
-                    print(full_link)
+                    link = getLink(anchor)
+                    print(link)
     except AttributeError as e:
         print(e)
