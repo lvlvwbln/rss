@@ -29,6 +29,14 @@ def getTitle(anchor):
         title = title.get_text().strip()
     return title
 
+def getDate(anchor):
+    try:
+        date = anchor.find('div', {'class': 'flo-footnote'})
+        date = date.get_text()
+        return date
+    except AttributeError as e:
+        return None
+
 try:
     html = urlopen(url)
 except HTTPError as e:
@@ -49,8 +57,7 @@ else:
                     title = getTitle(anchor)
                     print(title)
 
-                    date = anchor.find('div', {'class': 'flo-footnote'})
-                    date = date.get_text()
+                    date = getDate(anchor)
                     print(date)
 
                     link = anchor['href']
