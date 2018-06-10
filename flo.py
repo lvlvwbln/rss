@@ -73,13 +73,13 @@ except URLError as e:
 else:
     results = parseContent(html)
     fg = FeedGenerator()
-    fg.title('some testfeed')
-    fg.link(href='http://example.com', rel='alternate')
-    fg.description('foobar')
+    fg.title('Flo')
+    fg.link(href=url, rel='alternate')
+    fg.description('Flo')
     for result in results:
         (title, date, link) = result
         fe = fg.add_entry()
         fe.title(title)
         fe.link(href=link)
-    fg.rss_file('podcast.xml')
     fg.rss_str(pretty=True)
+    fg.rss_file('flo.xml')
