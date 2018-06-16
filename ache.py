@@ -18,21 +18,17 @@ ul = abertos.ul
 items = ul.find_all('li')[1:]
 for li in items:
     content = ''
-#    print(li.prettify())
-    divs = li.find_all('div')[1:]
-    limit_date = divs[0].get_text()
-    vaccancies = divs[1].get_text()
-    income = divs[2].get_text()
+    divs = li.find_all('div')
+    anchor = divs[0].span.a
+    title = anchor.get_text()
+    link = anchor['href']
+    limit_date = divs[1].get_text()
+    vaccancies = divs[2].get_text()
+    income = divs[3].get_text()
     content += "Fim inscrições: " + limit_date + "\n"
     content += "Vagas: " + vaccancies + "\n"
     content += "Salário: " + income
-#    print(content)
-
-    anchors = li.find_all('a')
-    for anchor in anchors:
-        title = anchor.get_text()
-        link = anchor['href']
-        articles.append(Article(title, link, content))
+    articles.append(Article(title, link, content))
 
 for article in articles:
     print(article.title)
